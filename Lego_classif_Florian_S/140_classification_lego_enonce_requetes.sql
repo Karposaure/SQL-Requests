@@ -1,8 +1,6 @@
 -- ---------------------------------------------------------------------------
 -- CONNECTION --
-SERVER= 
-DATABASE= lego_classification;
-Trusted_Connection= TRUE;
+USE lego_classification
 -- ---------------------------------------------------------------------------
 -- script :        queries.sql
 -- database:       lego_classification
