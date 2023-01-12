@@ -1,0 +1,5 @@
+{
+    "git.autoStash": true,
+    "git.enableSmartCommit": true,
+    "git.alwaysShowStagedChangesResourceGroup": true
+}
