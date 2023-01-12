@@ -1,4 +1,8 @@
 -- ---------------------------------------------------------------------------
+-- CONNECTION --
+SERVER= 
+DATABASE= lego_classification;
+Trusted_Connection= TRUE;
 -- ---------------------------------------------------------------------------
 -- script :        queries.sql
 -- database:       lego_classification
