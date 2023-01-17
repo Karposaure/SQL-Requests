@@ -49,19 +49,26 @@ FROM   PLNF;
 -- 1.
 -- Toutes les dernières planifications connues affichées par
 -- date de planification.
-
+SELECT PLNF.Num,PLNF.Elmt,PLNF.DatePlnf
+FROM PLNF
 WHERE PLNF.ProchainePlnf IS NULL
 ;
 
 -- 2.
 -- L'âge - en année - de chaque employé (l'année civile faisant foi).
 -- L'utilisation des fonctions CONVERT(), GETDATE() et DATEDIFF() pourraient s'avérer utile.
--- A COMPLETER
-
+SELECT EMPL.Nom,CONVERT(varchar,EMPL.DateNaissance,105) as 'Date de naissance',CONVERT(varchar,GETDATE(),105) as 'TODAY',DATEDIFF(YEAR,EMPL.DateNaissance,GETDATE()) as 'Âge'
+FROM EMPL
 -- 3.
 -- L'âge - en année - de chaque employé (le jour d'anniversaire faisant foi)
 -- source : https://blogs.msdn.microsoft.com/samlester/2012/11/30/tsql-solve-it-your-way-finding-a-persons-current-age-based-on-birth-date/
--- A COMPLETER
+SELECT EMPL.Nom,CONVERT(varchar,EMPL.DateNaissance,105) as 'Date de naissance', CONVERT(varchar,GETDATE(),105) AS 'TODAY',
+CASE WHEN
+    DATEADD(YEAR,DATEDIFF(YEAR,EMPL.DateNaissance,GETDATE()),GETDATE()) < GETDATE() THEN  --contrôl si âge correct avec comparaison entre année actuelle et âge supposé
+    DATEDIFF(YEAR,EMPL.DateNaissance,GETDATE()) -- affichage âge cas normal
+    ELSE DATEDIFF(YEAR,EMPL.DateNaissance,GETDATE())-1 END as 'Âge'   --correction si âge incorrect
+FROM EMPL
+;
 
 -- -----------------------------------------------------------------
 -- -----------------------------------------------------------------
