@@ -83,12 +83,23 @@ FROM EMPL
 -- 2.
 -- Nom des employés qualifiés (= qui ont la compétence en maintenance)
 -- au niveau 5 et plus en mécanique (= MEC).
--- A COMPLETER
-
+SELECT EMPL.Nom
+FROM EMPL
+INNER JOIN CEMP on EMPL.Num = CEMP.Empl
+INNER JOIN CMNT on CEMP.CMnt = CMNT.Num
+WHERE CEMP.Niveau >= 5
+AND CMNT.DescrCourte = 'MEC'
+;
 -- 3.
 -- Description (longue) des compétences de maintenance requises pour
 -- l'élément 'pal-rob-1'.
--- A COMPLETER
+SELECT DISTINCT CMNT.DescrLongue
+FROM CMNT
+INNER JOIN CRQS ON CMNT.Num = CRQS.CMnt
+INNER JOIN PLNF ON CRQS.Plnf = PLNF.Num
+INNER JOIN ELMT ON PLNF.Elmt = ELMT.Num
+WHERE ELMT.DescrCourte = 'pal-rob-1'
+;
 
 -- 4.
 -- Nom des employés responsables des interventions planifiées au mois d'août 2020,
