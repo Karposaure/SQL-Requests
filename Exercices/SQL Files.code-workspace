@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		}
+	],
+	"settings": {
+		"dataworkspace.excludedProjects": [
+			"SQL Requests/Exercice LEGO_classification/Exercice LEGO_classification.sqlproj"
+		]
+	}
+}

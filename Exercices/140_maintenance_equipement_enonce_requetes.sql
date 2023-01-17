@@ -50,6 +50,8 @@ FROM   PLNF;
 -- Toutes les dernières planifications connues affichées par
 -- date de planification.
 
+WHERE PLNF.ProchainePlnf IS NULL
+;
 
 -- 2.
 -- L'âge - en année - de chaque employé (l'année civile faisant foi).
