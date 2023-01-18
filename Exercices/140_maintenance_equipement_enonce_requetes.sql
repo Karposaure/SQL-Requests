@@ -95,8 +95,18 @@ FROM
 -- Nom des employés qui ont un niveau - égal lequel - en automation
 -- avec la date d'obtention du niveau en question, affiché par
 -- ordre alphabétique
--- A COMPLETER
-
+SELECT
+    EMPL.Nom,
+    CEMP.Niveau,
+    CEMP.DateDe
+FROM
+    EMPL
+    INNER JOIN CEMP ON EMPL.Num = CEMP.Empl
+    INNER JOIN CMNT ON CEMP.CMnt = CMNT.DescrCourte
+WHERE
+    CMNT.DescrCourte = 'AUT'
+ORDER BY
+    EMPL.Nom ASC;
 -- 2.
 -- Nom des employés qualifiés (= qui ont la compétence en maintenance)
 -- au niveau 5 et plus en mécanique (= MEC).
@@ -175,12 +185,31 @@ WHERE
 -- 7.
 -- Nom des employés qui ont à la fois une compétence en automation et production,
 -- avec le niveau respectif de chacune de ces compétences.
-
+SELECT
+    EMPL.Nom,
+    DISTINCT CMNT.DescrCourte,
+    CEMP1.Niveau,
+    DISTINCT CMNT.DescrCourte,
+    CEMP.Niveau
+FROM
+    EMPL
+    INNER JOIN CEMP as CEMP1 ON EMPL.Num = CEMP1.Empl
+    INNER JOIN CMNT AS CMNT1 ON CEMP1.Empl = CMNT1.Num
+    INNER JOIN CEMP AS CEMP2 ON EMPL.Num = CEMP2.Empl
 
 
 -- 8.
 -- Nombre de rois que l'employée 'Annelise Killerby' a été responsable d'interventions.
--- A COMPLETER
+SELECT
+    EMPL.Nom,
+    COUNT(INTR.EmplResp) AS 'Nb interventions'
+FROM
+    EMPL
+    INNER JOIN INTR ON EMPL.Num = INTR.EmplResp
+WHERE
+    EMPL.Nom = 'Annelise Killerby'
+GROUP BY
+    EMPL.Nom
 
 
 -- -----------------------------------------------------------------
@@ -190,17 +219,45 @@ WHERE
 -- 1.
 -- Les éléments ne faisant l'objet d'aucune planification de
 -- maintenance.
--- A COMPLETER
-
+SELECT
+    ELMT.Num,
+    ELMT.DescrCourte,
+    ELMT.DescrLongue
+FROM
+    ELMT
+    LEFT JOIN PLNF ON ELMT.Num = PLNF.Elmt
+WHERE
+    ELMT.Num <> PLNF.Elmt
 -- 2.
 -- Les planifications postérieures au 30 avril 2020 n'ayant  
 -- fait l'objet encore d'aucune intervention.
--- A COMPLETER
+SELECT
+    PLNF.Num,
+    PLNF.ProchainePlnf,
+    PLNF.Elmt,
+    PLNF.DatePlnf
+FROM
+    PLNF
+WHERE
+    Plnf.DatePlnf > '2020-04-30'
+    AND Plnf.ProchainePlnf IS NULL
 -- 3.
 -- Le nom des employés n'ayant pas encore été planifié comme
 -- responsable d'une maintenance.
--- A COMPLETER
-
+SELECT
+    EMPL.Num,
+    EMPL.Nom,
+    EMPL.DateNaissance
+FROM
+    EMPL
+WHERE
+    EMPL.Num NOT IN (
+        SELECT
+            EMPL.Num
+        FROM
+            EMPL
+            INNER JOIN INTR ON EMPL.Num = INTR.EmplResp
+    )
 -- 4.
 -- Les noms des employés qui ont au moins une autre compétence de
 -- maintenance qu'électronique (= Electronic), qu'ils aient celle-ci
@@ -209,12 +266,49 @@ WHERE
 -- Alfie Tarbett, Dasi Wrigglesworth et Erika Gerram n'ont qu'une seule
 -- compétence, soit 'Electronic', donc ne devraient pas apparaître
 -- dans le résultat de la requête.
--- A COMPLETER
+SELECT DISTINCT
+    EMPL.Nom
+FROM
+    EMPL
+    INNER JOIN CEMP ON EMPL.Num = CEMP.Empl
+    INNER JOIN CMNT ON CEMP.CMnt = CMNT.Num
+WHERE
+    EXISTS (
+        SELECT
+            EMPL.Nom
+        FROM
+            EMPL
+            INNER JOIN CEMP ON EMPL.Num = CEMP.Empl
+            INNER JOIN CMNT ON CEMP.CMnt = CMnt.Num
+        WHERE
+            EXISTS (
+                SELECT
+                    EMPL.Nom
+                FROM
+                    EMPL
+                    INNER JOIN CEMP ON Empl.Num = CEMP.Empl
+                    INNER JOIN CMNT ON CEMP.CMnt = CMNT.Num
+                WHERE
+                    CMNT.DescrCourte = 'ELE'
+            )
+            AND CMNT.DescrCourte <> 'ELE'
+    )
+
 
 -- 5.
 -- Les employés dotés de compétence en automation mais qui n'ont 
 -- pas atteint le niveau de compétence 5 en la matière.
--- A COMPLETER
+SELECT
+    EMPL.Num,
+    EMPL.Nom,
+    EMPL.DateNaissance
+FROM
+    EMPL
+    INNER JOIN CEMP ON EMPl.Num = CEMP.Empl
+    INNER JOIN CMNT ON CEMP.CMnt = CMnt.Num
+WHERE
+    CMNT.DescrCourte = 'AUT'
+    AND CEMP.Niveau < 5
     
 -- -----------------------------------------------------------------
 -- -----------------------------------------------------------------
