@@ -187,17 +187,19 @@ WHERE
 -- avec le niveau respectif de chacune de ces compétences.
 SELECT
     EMPL.Nom,
-    DISTINCT CMNT.DescrCourte,
+    CMNT1.DescrCourte,
     CEMP1.Niveau,
-    DISTINCT CMNT.DescrCourte,
-    CEMP.Niveau
+    CMNT2.DescrCourte,
+    CEMP2.Niveau
 FROM
     EMPL
     INNER JOIN CEMP as CEMP1 ON EMPL.Num = CEMP1.Empl
-    INNER JOIN CMNT AS CMNT1 ON CEMP1.Empl = CMNT1.Num
+    INNER JOIN CMNT AS CMNT1 ON CEMP1.CMnt = CMNT1.Num
     INNER JOIN CEMP AS CEMP2 ON EMPL.Num = CEMP2.Empl
-
-
+    INNER JOIN CMNT AS CMNT2 ON CEMP2.CMnt = CMNT2.Num
+WHERE
+    CMNT1.DescrCourte = 'AUT'
+    AND CMNT2.DescrCourte = 'PRO'
 -- 8.
 -- Nombre de rois que l'employée 'Annelise Killerby' a été responsable d'interventions.
 SELECT
@@ -270,28 +272,15 @@ SELECT DISTINCT
     EMPL.Nom
 FROM
     EMPL
-    INNER JOIN CEMP ON EMPL.Num = CEMP.Empl
-    INNER JOIN CMNT ON CEMP.CMnt = CMNT.Num
-WHERE
-    EXISTS (
+WHERE EMPL.Num
+    IN (
         SELECT
-            EMPL.Nom
+            EMPL.Num
         FROM
             EMPL
             INNER JOIN CEMP ON EMPL.Num = CEMP.Empl
             INNER JOIN CMNT ON CEMP.CMnt = CMnt.Num
-        WHERE
-            EXISTS (
-                SELECT
-                    EMPL.Nom
-                FROM
-                    EMPL
-                    INNER JOIN CEMP ON Empl.Num = CEMP.Empl
-                    INNER JOIN CMNT ON CEMP.CMnt = CMNT.Num
-                WHERE
-                    CMNT.DescrCourte = 'ELE'
-            )
-            AND CMNT.DescrCourte <> 'ELE'
+        WHERE CMNT.DescrCourte <> 'ELE'
     )
 
 
