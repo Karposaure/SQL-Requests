@@ -50,12 +50,24 @@ FROM TCHN;
 -- 1.
 -- Le nombre d'incidents qui ont ete declares pendant le mois
 -- de decembre 2020.
--- A COMPLETER
+
+--VERSION FLO
+SELECT COUNT(*)
+FROM INEF
+WHERE YEAR(INEF.DateInef) = 2020
+AND MONTH(INEF.DateInef) = 12
+
 
 -- ----------------------------------------------------------
 -- 2.
 -- Les incidents standards ou une pièce est cassee ou defectueuse.
--- A COMPLETER
+SELECT *
+FROM INST
+WHERE INST.[Description] LIKE '%d_fect%'
+
+OR
+
+INST.[Description] LIKE '%cass%'
 
 -- ----------------------------------------------------------
 -- ----------------------------------------------------------
@@ -68,9 +80,13 @@ FROM TCHN;
 -- avec le depassement de duree en pourcentage
 -- Tips : La fonction CAST() pourrait etre utile pour
 -- afficher correctement le % d'augmentation
--- A COMPLETER
+SELECT RPST.Num,RPST.Description,RPST.Duree,RPEF.Num, RPEF.Description,RPEF.Duree, FLOOR((((CONVERT(float,RPEF.Duree)/CONVERT(float,RPST.Duree)))*100 ))AS 'Pourcentage'
+FROM RPST
+INNER JOIN
+RPEF ON RPST.Num = RPEF.Rpst
+WHERE RPEF.Duree > RPST.Duree
 
--- ----------------------------------------------------------
+ ----------------------------------------------------------
 -- 2.
 -- Les reparations affectees a Maelle Bahon qui n'ont pas
 -- encore ete resolues
@@ -115,4 +131,3 @@ FROM TCHN;
 -- ----------------------------------------------------------
 -- 1.
 -- Les incidents standards pouvant decouler d'un probleme electrique
--- A COMPLETER
