@@ -30,7 +30,7 @@ ORDER BY
 -- 2. L'id des meules de fromage qui étaient en cave le 21 février 2020 à la
 -- 'Fromagerie du lac' située dans le canton de Vaud, affichés par ordre ascendant des ids.
 SELECT
-    cheese_wheel.id, cheese_wheel.input_cellar_date
+    cheese_wheel.id
 FROM
     cheese_wheel
 WHERE
